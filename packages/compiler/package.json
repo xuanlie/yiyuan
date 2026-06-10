@@ -1,0 +1,21 @@
+{
+  "name": "@yiyuanjs/compiler",
+  "version": "0.1.8",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@yiyuanjs/core": "^0.0.2",
+    "jiti": "^2.7.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1"
+  },
+  "module": "dist/index.js",
+  "files": [
+    "dist"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "watch": ["playground/schema.ts", "packages/*/src"],
+  "ext": "ts",
+  "exec": "tsx playground/dev.ts",
+  "ignore": ["node_modules", "dist", ".yiyuan*"]
+}

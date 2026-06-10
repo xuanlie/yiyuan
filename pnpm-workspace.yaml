@@ -1,0 +1,9 @@
+packages:
+  - 'packages/*'
+minimumReleaseAge: false
+minimumReleaseAgeExclude:
+  - '@yiyuanjs/compiler@0.0.2'
+  - '@yiyuanjs/core@0.0.2'
+  - '@yiyuanjs/server@0.0.2'
+  - '@yiyuanjs/compiler@0.0.4'
+  - '@yiyuanjs/server@0.0.5'

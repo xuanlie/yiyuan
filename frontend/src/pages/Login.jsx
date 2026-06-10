@@ -1,0 +1,6 @@
+import { Form, Input, Button, Card, message } from 'antd'; import { UserOutlined, LockOutlined } from '@ant-design/icons'; import { useState } from 'react'; import { api } from '../api';
+export default function Login({ onLogin }) {
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values) => { setLoading(true); try { await api.login(values.username, values.password); message.success('登录成功'); onLogin(); } catch (e) { message.error('登录失败：' + e.message); } finally { setLoading(false); } };
+  return (<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f0f2f5' }}><Card title="Yiyuan 管理登录" style={{ width: 400 }}><Form onFinish={onFinish}><Form.Item name="username" rules={[{ required: true }]}><Input prefix={<UserOutlined />} placeholder="用户名" /></Form.Item><Form.Item name="password" rules={[{ required: true }]}><Input.Password prefix={<LockOutlined />} placeholder="密码" /></Form.Item><Form.Item><Button type="primary" htmlType="submit" loading={loading} block>登录</Button></Form.Item></Form></Card></div>);
+}

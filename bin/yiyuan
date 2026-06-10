@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+npx tsx "$(dirname "$0")/../packages/cli/src/index.ts" "$@"

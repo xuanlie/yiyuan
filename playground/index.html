@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一元 — 课程评价</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f0f;--s:#18181b;--s2:#1f1f23;--b:#27272a;--t:#e4e4e7;--m:#71717a;--cyan:#22d3ee;--green:#4ade80;--yellow:#facc15;--red:#f87171;--blue:#60a5fa;--purple:#c084fc}
+body{background:var(--bg);color:var(--t);font-family:system-ui,sans-serif;font-weight:300;min-height:100vh}
+nav{display:flex;align-items:center;padding:18px 32px;border-bottom:1px solid var(--b);gap:28px;flex-wrap:wrap}
+nav .logo{font-size:15px;font-weight:600;letter-spacing:.12em}
+nav .logo span{color:var(--cyan)}
+nav a{font-size:12px;color:var(--m);letter-spacing:.1em;cursor:pointer;padding:4px 0;border-bottom:2px solid transparent;transition:all .2s}
+nav a:hover{color:var(--t)}
+nav a.active{color:var(--t);border-bottom-color:var(--cyan)}
+main{max-width:1000px;margin:0 auto;padding:36px 28px}
+h2{font-size:12px;letter-spacing:.15em;color:var(--m);margin-bottom:20px;font-weight:500;text-transform:uppercase}
+
+/* cards */
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.course-card{background:var(--s);border:1px solid var(--b);padding:20px;cursor:pointer;transition:all .2s;position:relative;animation:fadeUp .4s ease forwards;opacity:0}
+.course-card:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.course-card .code{font-size:11px;color:var(--cyan);letter-spacing:.1em;margin-bottom:6px}
+.course-card .name{font-size:16px;font-weight:400;margin-bottom:10px}
+.course-card .dept{font-size:12px;color:var(--m);margin-bottom:12px}
+.course-card .stats{display:flex;gap:16px;font-size:12px}
+.course-card .stats .score{color:var(--yellow);font-weight:500}
+.course-card .stats .count{color:var(--m)}
+.course-card .stats .diff{padding:2px 7px;border:1px solid var(--b);font-size:10px}
+.course-card .stats .diff.easy{color:var(--green);border-color:var(--green)}
+.course-card .stats .diff.medium{color:var(--yellow);border-color:var(--yellow)}
+.course-card .stats .diff.hard{color:var(--red);border-color:var(--red)}
+.course-card .credits{position:absolute;top:16px;right:16px;font-size:11px;color:var(--m)}
+
+/* detail */
+.detail{background:var(--s);border:1px solid var(--b);padding:28px;margin-bottom:24px;animation:fadeUp .3s ease forwards}
+.detail .back{font-size:12px;color:var(--cyan);cursor:pointer;margin-bottom:16px;display:inline-block}
+.detail .back:hover{text-decoration:underline}
+.detail h3{font-size:20px;font-weight:400;margin-bottom:8px}
+.detail .meta{display:flex;gap:16px;font-size:13px;color:var(--m);margin-bottom:16px;flex-wrap:wrap}
+.detail .big-score{font-size:48px;font-weight:200;color:var(--yellow)}
+.detail .big-count{font-size:13px;color:var(--m);margin-bottom:20px}
+.detail .desc{font-size:14px;line-height:1.7;color:var(--m)}
+
+/* reviews */
+.review-card{background:var(--s2);border:1px solid var(--b);padding:16px;margin-bottom:12px;animation:fadeUp .3s ease forwards;opacity:0}
+.review-card .header{display:flex;justify-content:space-between;margin-bottom:8px}
+.review-card .student{font-size:13px;color:var(--blue)}
+.review-card .date{font-size:11px;color:var(--m)}
+.review-card .stars{color:var(--yellow);margin-bottom:8px;font-size:14px;letter-spacing:2px}
+.review-card .diff{font-size:11px;padding:2px 7px;border:1px solid var(--b);margin-left:8px}
+.review-card .comment{font-size:14px;line-height:1.6;color:var(--t)}
+
+/* forms */
+.form-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.form-row input,.form-row select,.form-row textarea{background:var(--s);border:1px solid var(--b);color:var(--t);padding:11px 14px;font-size:13px;font-family:inherit;font-weight:300;outline:none;transition:border-color .2s}
+.form-row input,.form-row select{min-width:0}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--cyan)}
+.form-row select{cursor:pointer;-webkit-appearance:none;padding-right:24px}
+.form-row select option{background:var(--s)}
+.form-row textarea{flex:1;min-height:60px;resize:vertical}
+.btn{background:var(--cyan);color:var(--bg);border:none;padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:.1em;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.8}
+.btn.secondary{background:var(--s2);color:var(--t);border:1px solid var(--b)}
+.btn.secondary:hover{border-color:var(--cyan)}
+
+.empty{text-align:center;padding:60px 0;color:var(--m);font-size:13px}
+.loading{text-align:center;padding:60px 0;color:var(--m);font-size:13px}
+
+/* test */
+.test-panel{margin-top:48px;border:1px solid var(--b);padding:24px}
+#testLog{font-family:monospace;font-size:12px;line-height:2;white-space:pre-wrap;margin-top:12px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.gen{position:fixed;bottom:14px;right:14px;font-size:10px;color:var(--m);letter-spacing:.08em;opacity:.5}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo"><span>一元</span> 课程评价</div>
+  <a onclick="showView('courses')" id="nav-courses" class="active">课程</a>
+  <a onclick="showView('students')" id="nav-students">学生</a>
+  <a onclick="showView('add-review')" id="nav-add-review">写评价</a>
+</nav>
+
+<main>
+  <!-- 课程列表 -->
+  <div id="view-courses">
+    <h2>全部课程</h2>
+    <div id="courseGrid" class="course-grid"><div class="loading">加载中...</div></div>
+  </div>
+
+  <!-- 课程详情 -->
+  <div id="view-course-detail" style="display:none">
+    <div id="courseDetail"></div>
+    <h2 style="margin-top:28px">评价</h2>
+    <div id="courseReviews"></div>
+  </div>
+
+  <!-- 学生管理 -->
+  <div id="view-students" style="display:none">
+    <h2>学生</h2>
+    <div class="form-row">
+      <input id="s-name" placeholder="姓名">
+      <input id="s-email" placeholder="邮箱">
+      <input id="s-major" placeholder="专业">
+      <select id="s-year">
+        <option value="freshman">大一</option>
+        <option value="sophomore">大二</option>
+        <option value="junior">大三</option>
+        <option value="senior">大四</option>
+      </select>
+      <button class="btn" onclick="addStudent()">注册</button>
+    </div>
+    <div id="studentList"></div>
+  </div>
+
+  <!-- 写评价 -->
+  <div id="view-add-review" style="display:none">
+    <h2>写评价</h2>
+    <div class="form-row">
+      <select id="r-course"><option value="">选择课程...</option></select>
+      <select id="r-student"><option value="">选择学生...</option></select>
+      <select id="r-rating">
+        <option value="5">5 星</option>
+        <option value="4">4 星</option>
+        <option value="3" selected>3 星</option>
+        <option value="2">2 星</option>
+        <option value="1">1 星</option>
+      </select>
+      <select id="r-diff">
+        <option value="easy">简单</option>
+        <option value="medium" selected>中等</option>
+        <option value="hard">困难</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <textarea id="r-comment" placeholder="写下你的评价..."></textarea>
+    </div>
+    <div class="form-row">
+      <button class="btn" onclick="submitReview()">提交评价</button>
+    </div>
+  </div>
+
+  <!-- 测试 -->
+  <div class="test-panel" style="margin-top:48px">
+    <h2>自测</h2>
+    <button class="btn" onclick="runTests()">运行全量测试</button>
+    <div id="testLog"></div>
+  </div>
+</main>
+
+<div class="gen">一元 自动生成 @yiyuan/compiler</div>
+
+<script>
+var API='/api/';
+var currentView='courses';
+
+function api(model,method,body){
+  var opts={method:method,headers:{'Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  return fetch(API+model,opts).then(function(r){
+    if(!r.ok)throw new Error(method+' /'+model+' -> '+r.status);
+    return r.json();
+  });
+}
+
+function showView(name){
+  currentView=name;
+  ['courses','students','add-review','course-detail'].forEach(function(v){
+    var el=document.getElementById('view-'+v);
+    if(el)el.style.display=v===name?'block':'none';
+    var nav=document.getElementById('nav-'+v);
+    if(nav)nav.className=v===name?'active':'';
+  });
+  if(name==='courses')loadCourses();
+  if(name==='students')loadStudents();
+  if(name==='add-review')loadFormOptions();
+}
+
+// ── 课程 ──
+var allCourses=[];
+var allReviews=[];
+
+function loadCourses(){
+  Promise.all([api('courses','GET'),api('reviews','GET')]).then(function(r){
+    allCourses=r[0];allReviews=r[1];
+    var grid=document.getElementById('courseGrid');
+    if(!allCourses.length){grid.innerHTML='<div class="empty">还没有课程</div>';return}
+    var html='';
+    allCourses.forEach(function(c,i){
+      var reviews=allReviews.filter(function(r){return r.course===c.id});
+      var avg=reviews.length?((reviews.reduce(function(s,r){return s+r.rating},0)/reviews.length)).toFixed(1):'—';
+      var diffMap={easy:'简单',medium:'中等',hard:'困难'};
+      html+='<div class="course-card" style="animation-delay:'+i*0.05+'s" onclick="showCourseDetail(\''+c.id+'\')">';
+      html+='<div class="credits">'+c.credits+' 学分</div>';
+      html+='<div class="code">'+c.code+'</div>';
+      html+='<div class="name">'+c.name+'</div>';
+      html+='<div class="dept">'+c.department+'</div>';
+      html+='<div class="stats">';
+      html+='<span class="score">★ '+avg+'</span>';
+      html+='<span class="count">'+reviews.length+' 评价</span>';
+      html+='<span class="diff '+(c.difficulty||'medium')+'">'+(diffMap[c.difficulty]||'中等')+'</span>';
+      html+='</div></div>';
+    });
+    grid.innerHTML=html;
+  }).catch(function(e){
+    document.getElementById('courseGrid').innerHTML='<div class="empty">'+e.message+'</div>';
+  });
+}
+
+function showCourseDetail(id){
+  showView('course-detail');
+  var course=allCourses.find(function(c){return c.id===id});
+  if(!course)return;
+  var reviews=allReviews.filter(function(r){return r.course===id});
+  var avg=reviews.length?((reviews.reduce(function(s,r){return s+r.rating},0)/reviews.length)).toFixed(1):'—';
+  var diffMap={easy:'简单',medium:'中等',hard:'困难'};
+
+  var h='<span class="back" onclick="showView(\'courses\')">← 返回课程列表</span>';
+  h+='<div class="detail"><div class="code" style="color:var(--cyan);font-size:11px;letter-spacing:.1em;margin-bottom:8px">'+course.code+'</div>';
+  h+='<h3>'+course.name+'</h3>';
+  h+='<div class="meta"><span>'+course.department+'</span><span>'+course.credits+' 学分</span><span class="diff '+(course.difficulty||'medium')+'">'+(diffMap[course.difficulty]||'中等')+'</span></div>';
+  h+='<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px">';
+  h+='<div class="big-score">'+avg+'</div>';
+  h+='<div class="big-count">/ 5 · '+reviews.length+' 条评价</div></div>';
+  h+='<div class="desc">'+(course.description||'暂无课程简介')+'</div></div>';
+  document.getElementById('courseDetail').innerHTML=h;
+
+  var rh='';
+  if(!reviews.length){rh='<div class="empty">还没有评价</div>'}
+  else{reviews.forEach(function(r,j){
+    var student=allStudents.find(function(s){return s.id===r.student});
+    var stars='';for(var k=0;k<5;k++)stars+=k<r.rating?'★':'☆';
+    rh+='<div class="review-card" style="animation-delay:'+j*0.06+'s">';
+    rh+='<div class="header"><span class="student">'+(student?student.name:'匿名')+'</span><span class="date">'+new Date(r.createdAt).toLocaleDateString()+'</span></div>';
+    rh+='<div class="stars">'+stars+'<span class="diff '+(r.difficulty||'medium')+'">'+(diffMap[r.difficulty]||'中等')+'</span></div>';
+    rh+='<div class="comment">'+(r.comment||'')+'</div></div>';
+  })}
+  document.getElementById('courseReviews').innerHTML=rh;
+}
+
+// ── 学生 ──
+var allStudents=[];
+
+function loadStudents(){
+  api('students','GET').then(function(data){
+    allStudents=data;
+    var el=document.getElementById('studentList');
+    if(!data.length){el.innerHTML='<div class="empty">还没有学生</div>';return}
+    var yearMap={freshman:'大一',sophomore:'大二',junior:'大三',senior:'大四'};
+    var h='<table style="width:100%;border-collapse:collapse;font-size:13px">';
+    h+='<thead><tr style="text-align:left;font-size:11px;color:var(--m);letter-spacing:.1em">';
+    h+='<th style="padding:10px 12px;border-bottom:1px solid var(--b)">姓名</th>';
+    h+='<th style="padding:10px 12px;border-bottom:1px solid var(--b)">邮箱</th>';
+    h+='<th style="padding:10px 12px;border-bottom:1px solid var(--b)">专业</th>';
+    h+='<th style="padding:10px 12px;border-bottom:1px solid var(--b)">年级</th>';
+    h+='<th style="padding:10px 12px;border-bottom:1px solid var(--b)"></th></tr></thead><tbody>';
+    data.forEach(function(s,i){
+      h+='<tr class="stagger" style="animation-delay:'+i*0.05+'s">';
+      h+='<td style="padding:12px;border-bottom:1px solid var(--b)">'+s.name+'</td>';
+      h+='<td style="padding:12px;border-bottom:1px solid var(--b);color:var(--m)">'+s.email+'</td>';
+      h+='<td style="padding:12px;border-bottom:1px solid var(--b);color:var(--m)">'+(s.major||'—')+'</td>';
+      h+='<td style="padding:12px;border-bottom:1px solid var(--b)"><span class="badge '+s.year+'">'+(yearMap[s.year]||s.year)+'</span></td>';
+      h+='<td style="padding:12px;border-bottom:1px solid var(--b)"><button class="del-btn" onclick="deleteStudent(\''+s.id+'\')">&times;</button></td></tr>';
+    });
+    h+='</tbody></table>';
+    el.innerHTML=h;
+  }).catch(function(e){
+    document.getElementById('studentList').innerHTML='<div class="empty">'+e.message+'</div>';
+  });
+}
+
+function addStudent(){
+  var name=document.getElementById('s-name').value.trim();
+  var email=document.getElementById('s-email').value.trim();
+  if(!name||!email)return;
+  api('students','POST',{
+    name:name,email:email,
+    major:document.getElementById('s-major').value.trim(),
+    year:document.getElementById('s-year').value
+  }).then(function(){
+    ['s-name','s-email','s-major'].forEach(function(id){document.getElementById(id).value=''});
+    loadStudents();
+  });
+}
+
+function deleteStudent(id){
+  api('students','DELETE',{id:id}).then(loadStudents);
+}
+
+// ── 评价 ──
+function loadFormOptions(){
+  Promise.all([api('courses','GET'),api('students','GET')]).then(function(r){
+    var cs=document.getElementById('r-course');
+    cs.innerHTML='<option value="">选择课程...</option>'+r[0].map(function(c){return '<option value="'+c.id+'">'+c.code+' '+c.name+'</option>'}).join('');
+    var ss=document.getElementById('r-student');
+    ss.innerHTML='<option value="">选择学生...</option>'+r[1].map(function(s){return '<option value="'+s.id+'">'+s.name+'</option>'}).join('');
+  });
+}
+
+function submitReview(){
+  var courseId=document.getElementById('r-course').value;
+  var studentId=document.getElementById('r-student').value;
+  if(!courseId||!studentId){alert('请选择课程和学生');return}
+  api('reviews','POST',{
+    course:courseId,student:studentId,
+    rating:Number(document.getElementById('r-rating').value),
+    difficulty:document.getElementById('r-diff').value,
+    comment:document.getElementById('r-comment').value.trim()
+  }).then(function(){
+    document.getElementById('r-comment').value='';
+    alert('评价已提交');
+  });
+}
+
+// ── 测试 ──
+function runTests(){
+  var log=document.getElementById('testLog');
+  log.innerHTML='';
+  var pass=0,fail=0,created={courses:[],students:[],reviews:[]};
+  function h(m){log.innerHTML+='<span style="color:var(--cyan);font-weight:600">\n'+m+'</span>\n'}
+  function ok(m){pass++;log.innerHTML+='<span style="color:var(--green)">  \u2713 '+m+'</span>\n'}
+  function no(m,e){fail++;log.innerHTML+='<span style="color:var(--red)">  \u2717 '+m+': '+e+'</span>\n'}
+
+  h('1. 创建课程');
+  api('courses','POST',{name:'数据结构与算法',code:'CS201',department:'计算机科学',credits:4,difficulty:'hard',description:'学习树、图、排序、搜索等核心算法'})
+  .then(function(c){created.courses.push(c.id);ok('创建: '+c.name+' ['+c.code+']');
+    return api('courses','POST',{name:'线性代数',code:'MATH101',department:'数学系',credits:3,difficulty:'medium',description:'矩阵、向量空间、特征值'});
+  }).then(function(c){created.courses.push(c.id);ok('创建: '+c.name+' ['+c.code+']');
+    return api('courses','POST',{name:'大学英语',code:'ENG101',department:'外语系',credits:2,difficulty:'easy',description:'提高英语听说读写能力'});
+  }).then(function(c){created.courses.push(c.id);ok('创建: '+c.name+' ['+c.code+']');
+
+    h('2. 注册学生');
+    return api('students','POST',{name:'张三',email:'zhangsan@edu.cn',major:'计算机科学',year:'junior'});
+  }).then(function(s){created.students.push(s.id);ok('注册: '+s.name);
+    return api('students','POST',{name:'李四',email:'lisi@edu.cn',major:'数学',year:'sophomore'});
+  }).then(function(s){created.students.push(s.id);ok('注册: '+s.name);
+    return api('students','POST',{name:'王五',email:'wangwu@edu.cn',major:'外语',year:'freshman'});
+  }).then(function(s){created.students.push(s.id);ok('注册: '+s.name);
+
+    h('3. 提交评价');
+    return api('reviews','POST',{course:created.courses[0],student:created.students[0],rating:4,difficulty:'hard',comment:'课程很难但收获很大，老师讲得很清楚'});
+  }).then(function(r){created.reviews.push(r.id);ok('评价: 数据结构 4星');
+    return api('reviews','POST',{course:created.courses[0],student:created.students[1],rating:5,difficulty:'hard',comment:'算法课天花板，强烈推荐'});
+  }).then(function(r){created.reviews.push(r.id);ok('评价: 数据结构 5星');
+    return api('reviews','POST',{course:created.courses[1],student:created.students[0],rating:3,difficulty:'medium',comment:'中规中矩，作业比较多'});
+  }).then(function(r){created.reviews.push(r.id);ok('评价: 线性代数 3星');
+    return api('reviews','POST',{course:created.courses[2],student:created.students[2],rating:4,difficulty:'easy',comment:'轻松拿高分，老师人很好'});
+  }).then(function(r){created.reviews.push(r.id);ok('评价: 大学英语 4星');
+
+    h('4. 查询验证');
+    return api('courses','GET');
+  }).then(function(all){ok('课程: '+all.length+' 门');
+    all.forEach(function(c){log.innerHTML+='<span style="color:var(--m)">    '+c.code+' '+c.name+' '+c.credits+'学分</span>\n'});
+    return api('students','GET');
+  }).then(function(all){ok('学生: '+all.length+' 人');
+    return api('reviews','GET');
+  }).then(function(all){ok('评价: '+all.length+' 条');
+
+    h('5. 计算平均分');
+    var courseReviews=all.filter(function(r){return r.course===created.courses[0]});
+    var avg=(courseReviews.reduce(function(s,r){return s+r.rating},0)/courseReviews.length).toFixed(1);
+    ok('数据结构平均分: '+avg+' (期望 4.5)');
+
+    h('--- 结果 ---');
+    log.innerHTML+='<span style="color:var(--green)">  通过: '+pass+'</span>  ';
+    log.innerHTML+='<span style="color:var(--red)">  失败: '+fail+'</span>\n';
+    loadCourses();loadStudents();
+  }).catch(function(e){no('异常',e.message)});
+}
+
+loadCourses();
+loadStudents();
+</script>
+</body>
+</html>

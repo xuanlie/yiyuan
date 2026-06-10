@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "paths": {
+      "@yiyuan/core": ["./packages/core/src"],
+      "@yiyuan/compiler": ["./packages/compiler/src"],
+      "@yiyuan/server": ["./packages/server/src"],
+      "@yiyuan/cli": ["./packages/cli/src"]
+    }
+  }
+}

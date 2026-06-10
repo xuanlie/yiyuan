@@ -1,0 +1,33 @@
+{
+  "name": "yiyuanjs",
+  "type": "commonjs",
+  "version": "0.1.9",
+  "main": "dist/index.js",
+  "bin": {
+    "yiyuan": "bin/yiyuan",
+    "yiyuanjs": "bin/yiyuan"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.14",
+    "@inquirer/prompts": "^8.5.2",
+    "@types/inquirer": "^9.0.9",
+    "@yiyuanjs/compiler": "^0.1.8",
+    "@yiyuanjs/server": "^0.1.8",
+    "commander": "^15.0.0",
+    "hono": "^4.12.23",
+    "inquirer": "^14.0.2",
+    "tsx": "^4.22.4",
+    "ws": "^8.21.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "bin",
+    "dist"
+  ]
+}

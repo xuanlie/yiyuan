@@ -1,0 +1,36 @@
+{
+  "name": "yiyuan",
+  "private": true,
+  "version": "0.0.1",
+  "description": "一元 — 一个 Schema，驱动全栈",
+  "type": "module",
+  "bin": {
+    "yiyuan": "bin/yiyuan",
+    "yy": "./bin/yiyuan"
+  },
+  "scripts": {
+    "dev": "tsx packages/cli/src/index.ts dev playground/schema.ts --banner colorful",
+    "build": "pnpm -r --filter @yiyuanjs/core --filter @yiyuanjs/compiler --filter @yiyuanjs/server --filter yiyuanjs run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "release": "pnpm build && pnpm -r publish --access public",
+    "dev:all": "concurrently -n BACK,FRONT -c blue,green \"pnpm dev\" \"cd frontend && npm run dev\""
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "concurrently": "^10.0.3",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.19.0",
+    "turbo": "^2.9.16",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.4",
+    "hono": "^4.12.23",
+    "yiyuanjs": "workspace:*",
+    "@yiyuanjs/core": "workspace:*",
+    "@yiyuanjs/compiler": "workspace:*",
+    "@yiyuanjs/server": "workspace:*"
+  }
+}

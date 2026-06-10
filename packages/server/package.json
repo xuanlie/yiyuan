@@ -1,0 +1,31 @@
+{
+  "name": "@yiyuanjs/server",
+  "version": "0.1.8",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup && cp -r src/db dist/"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.11.0",
+    "@yiyuanjs/compiler": "^0.0.4",
+    "hono": "^4.4.0",
+    "lowdb": "^7.0.1",
+    "prom-client": "^15.1.3"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1"
+  },
+  "module": "dist/index.js",
+  "optionalDependencies": {
+    "better-sqlite3": "^12.10.0",
+    "mongodb": "^7.2.0",
+    "mysql2": "^3.22.5",
+    "pg": "^8.21.0",
+    "redis": "^6.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

@@ -1,0 +1,12 @@
+node_modules
+dist
+*.log
+.DS_Store
+.yiyuan
+test-app
+my-app
+playground/.yiyuan
+playground/node_modules
+*.py
+pnpm-lock.yaml
+.npmrc
